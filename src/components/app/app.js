@@ -16,6 +16,7 @@ export default class App extends Component {
       users: users,
       username: 'Guest',
       password: '',
+      search: '',
     };
   }
 
@@ -49,10 +50,36 @@ export default class App extends Component {
     });
   }
 
+  onSearchChange = (search) => {
+    this.setState({ search });
+  }
+
+  searchUsers(users, search) {
+    if(search.length === 0) {
+      return users;
+    }
+
+    return users.filter((user) => {
+      return user.username.toLowerCase().indexOf(search.toLowerCase()) > -1;
+    });
+  }
+
+  onSortAscending = (users) => {
+    return users.sort((a, b) => a.id > b.id ? 1 : -1)
+  }
+
+  onSortDescending = (users) => {
+    return users.sort((a, b) => a.id < b.id ? 1 : -1)
+  }
+
   render() {
 
-    const { isLoggedIn, users } = this.state;
+    const { isLoggedIn, users, search } = this.state;
+    const visibleUsers = this.searchUsers(users, search);
+
+    console.log('visible', visibleUsers);
     console.log(this.state);
+
     return(
       <Router>
         <Switch>
@@ -69,8 +96,11 @@ export default class App extends Component {
             render={() => (
               <UsersTable 
                 isLoggedIn={ isLoggedIn }
-                onLogout={ this.onLogout } 
-                users={ users }/>
+                onLogout={ this.onLogout }
+                onSearchChange={ this.onSearchChange }
+                onSortAscending={ this.onSortAscending }
+                onSortDescending={ this.onSortDescending } 
+                users={ visibleUsers } />
             )} />
           <Route path="/" component={LoginForm} />
         </Switch>

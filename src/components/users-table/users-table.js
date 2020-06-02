@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom'; 
 
-import SearchForm from '../search-form';
+import SearchPanel from '../search-panel';
 
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { Table, 
@@ -15,9 +15,6 @@ import CheckIcon from '@material-ui/icons/Check';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import IconButton from '@material-ui/core/IconButton';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-
-// import { users } from '../data';
 
 import './users-table.css';
 
@@ -51,17 +48,23 @@ const useStyles = makeStyles({
   }
 });
 
-const UsersTable = ({ isLoggedIn, onLogout, users }) => {
+const UsersTable = ({ 
+  isLoggedIn, 
+  onLogout, 
+  onSearchChange, 
+  onSortAsсending,
+  onSortDescending,
+  users }) => {
   const classes = useStyles();
   const elements = addRowTable(users);
+
+  console.log('users', users);
+  console.log(onSortAsсending);
 
   if(isLoggedIn) {
     return(
       <div>
-        <SearchForm onLogout={ onLogout }/>
-        {/* <IconButton onClick={ onLogout }>
-          <ExitToAppIcon color="primary" />
-        </IconButton> */}
+        <SearchPanel onLogout={ onLogout } onSearchChange={ onSearchChange }/>
         <TableContainer align="center">
           <Paper elevation={10} className={classes.table} >
             <Table>
@@ -69,10 +72,10 @@ const UsersTable = ({ isLoggedIn, onLogout, users }) => {
                 <TableRow>
                   <StyledTableCell>
                     ID
-                    <IconButton>
+                    <IconButton onClick={ console.log('hello') } >
                       <ArrowUpwardIcon className={classes.iconButton}/>
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={ console.log('bye') }>
                       <ArrowDownwardIcon className={classes.iconButton}/>
                     </IconButton>
                   </StyledTableCell>

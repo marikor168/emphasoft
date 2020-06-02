@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 import PersonIcon from '@material-ui/icons/Person';
 import LockIcon from '@material-ui/icons/Lock';
@@ -21,19 +22,24 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const LoginForm = () => {
-
+const LoginForm = ({ isLoggedIn, onLogin, onUsernameChange, onPasswordChange }) => {
   const classes = useStyles();
+  
+  if(isLoggedIn) {
+    return <Redirect to="/table" />
+  }
 
   return (
-    <Paper elevation={22} className="login-form__wrapper">
+    <div className="login-form__wrapper">
+      <Paper elevation={22} className="login-form__paper">
         <h1 className="login-form__title">Авторизация</h1>
-        <form className="login-form">
+        <form className="login-form" onSubmit={ onLogin }>
           <TextField
             className={classes.margin}
             type="text"
             name="username"
             placeholder="Пользователь"
+            onChange={ onUsernameChange }
             required 
             InputProps={{
               startAdornment: (
@@ -41,13 +47,13 @@ const LoginForm = () => {
                   <PersonIcon color="primary" />
                 </InputAdornment>
               ),
-            }}/>
-          
+            }}/>          
           <TextField  
             className={classes.margin}
             type="password"
             name="password"
             placeholder="Пароль"
+            onChange={ onPasswordChange }
             required 
             InputProps={{
               startAdornment: (
@@ -64,6 +70,7 @@ const LoginForm = () => {
             type="submit">Войти</Button>
         </form>
       </Paper>
+    </div>
   );
 };
 

@@ -1,7 +1,12 @@
 .login-form__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-form__paper {
   width: 400px;
-  margin: 0 auto;
-  padding-top: 20px;
 }
 
 .login-form {
@@ -15,5 +20,6 @@
   text-align: center;
   font-size: 23px;
   font-weight: 500;
-  color: #1a237e
+  color: #1a237e;
+  padding: 30px 0;
 }

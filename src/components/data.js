@@ -11,6 +11,17 @@ export const users = [
     is_superuser: true
   },
   {
+    id: 3,
+    username: 'ivanivan',
+    first_name: 'ivan',
+    last_name: 'ivanov',
+    password: '123',
+    groups: ['admin', 'user'],
+    is_active: true,
+    last_login: '01.06.2020',
+    is_superuser: false
+  },
+  {
     id: 2,
     username: 'marikor',
     first_name: 'mariia',
@@ -21,15 +32,5 @@ export const users = [
     last_login: '01.06.2020',
     is_superuser: false
   },
-  {
-    id: 3,
-    username: 'ivanivan',
-    first_name: 'ivan',
-    last_name: 'ivanov',
-    password: '123',
-    groups: ['admin', 'user'],
-    is_active: true,
-    last_login: '01.06.2020',
-    is_superuser: true
-  },
+  
 ];

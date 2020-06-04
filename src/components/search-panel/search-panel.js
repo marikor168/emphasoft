@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 
-import { 
-  TextField,
-  InputAdornment } from '@material-ui/core';
+import { TextField, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-
 import './search-panel.css';
-
 export default class SearchPanel extends Component {
 
   constructor(props) {
@@ -51,8 +47,7 @@ export default class SearchPanel extends Component {
           <IconButton onClick={ onLogout }>
             <ExitToAppIcon color="primary" />
           </IconButton>
-      </div>
-      
+      </div>      
     );
   }
 };

@@ -7,6 +7,7 @@
 
 .login-form__paper {
   width: 400px;
+  min-width: 400px;
 }
 
 .login-form {

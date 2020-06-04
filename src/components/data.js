@@ -5,7 +5,6 @@ export const users = [
     first_name: 'petr',
     last_name: 'petrov',
     password: '123',
-    groups: ['admin', 'user'],
     is_active: true,
     last_login: '01.06.2020',
     is_superuser: true
@@ -16,7 +15,6 @@ export const users = [
     first_name: 'ivan',
     last_name: 'ivanov',
     password: '123',
-    groups: ['admin', 'user'],
     is_active: true,
     last_login: '01.06.2020',
     is_superuser: false
@@ -27,7 +25,6 @@ export const users = [
     first_name: 'mariia',
     last_name: 'korotkova',
     password: '123',
-    groups: ['user'],
     is_active: false,
     last_login: '01.06.2020',
     is_superuser: false
@@ -39,7 +36,6 @@ export const users = [
     first_name: 'petr',
     last_name: 'petrov',
     password: '123',
-    groups: ['admin', 'user'],
     is_active: true,
     last_login: '01.06.2020',
     is_superuser: true
@@ -50,7 +46,6 @@ export const users = [
     first_name: 'ivan',
     last_name: 'ivanov',
     password: '123',
-    groups: ['admin', 'user'],
     is_active: true,
     last_login: '01.06.2020',
     is_superuser: false
@@ -61,7 +56,6 @@ export const users = [
     first_name: 'mariia',
     last_name: 'korotkova',
     password: '123',
-    groups: ['user'],
     is_active: false,
     last_login: '01.06.2020',
     is_superuser: false

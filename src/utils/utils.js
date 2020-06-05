@@ -6,6 +6,7 @@ export function sortDescending(users) {
   return users.sort((a, b) => a.id < b.id ? 1 : -1);
 }
 
+// validation username
 export function isUserValid(username) {
   let usernameValid = false;
   if(username.length > 0 && username.length < 151 && (/^[\w.@+-_]+$/.test(username))) {
@@ -14,6 +15,7 @@ export function isUserValid(username) {
   return usernameValid;
 }
 
+// validation password
 export function isPassValid(password) {
   let passwordValid = false;
   if(password.length > 0 && password.length < 129 && (/^(?=.*[A-Z])(?=.*\d).{8,}$/.test(password))) {

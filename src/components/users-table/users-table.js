@@ -4,7 +4,7 @@ import SearchPanel from '../search-panel';
 import Spinner from '../spinner';
 
 import { sortAscending, sortDescending, searchUsers } from '../../utils/utils.js';
-import emphaService from '../../services/emphaService';
+import { fetchToken, fetchUsers } from '../../services/emphaService';
 
 import { withStyles } from '@material-ui/core/styles';
 import { Table, 
@@ -21,8 +21,6 @@ import IconButton from '@material-ui/core/IconButton';
 
 import './users-table.css';
 
-const service = new emphaService();
-
 const StyledTableCell = withStyles((theme) => ({  
   head: {
     fontSize: 15,
@@ -31,7 +29,6 @@ const StyledTableCell = withStyles((theme) => ({
     color: '#ffffff',
     paddingTop: 5,
     paddingBottom: 5,
-
   },
   body: {
     fontSize: 14,
@@ -46,9 +43,10 @@ const tableStyle = {
   minWidth: 800,
   maxWidth: 1300,
   marginBottom: 30,
+  marginLeft: 15,
+  marginRight: 15,
   overflow: "hidden",
 }
-
 export default class UsersTable extends Component {
 
   constructor(props) {
@@ -77,43 +75,25 @@ export default class UsersTable extends Component {
 
   onSearchChange = (search) => {
     this.setState({ search });
-  }
+  }  
 
-  
+  async componentDidMount() {
+    let promise = await fetchToken();
+    let data = await promise.json();
+    let token = data.token;
 
-  componentDidMount() {
-    let users = service.users;
+    let userPromise = await fetchUsers(token);
+    let users = await userPromise.json();
 
     this.setState({
       users: users, 
       isLoading: false
     });
-    
-    // fetch("http://emphasoft-test-assignment.herokuapp.com/api-token-auth/", {
-    //   method: "POST",
-    //   body: JSON.stringify({username: "test_super", password: "Nf<U4f<rDbtDxAPn"}),
-    //   headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //       },
-    //   }).then(response => response.json())
-    //   .then(data => fetch("http://emphasoft-test-assignment.herokuapp.com/api/v1/users/", {
-    //     method: "GET",
-    //     headers: {
-    //           'Authorization': `Token ${data.token}`,
-    //         },
-    //     }).then(response => response.json())
-    //       .then(data => {
-    //         this.setState({users: data, isLoading: false})
-    //       })
-    //   );
   }
 
   render() {
     const { isAscending, isDescending, search, users } = this.state;
     const { onLogout } = this.props;
-
-    console.log('users render tableState', users);
 
     if(this.state.isLoading !== false) {
       return <Spinner />
@@ -121,7 +101,8 @@ export default class UsersTable extends Component {
 
       let sortUsers, sortArrows;
       const visibleUsers = searchUsers(users, search);
-
+      
+      // change sort arrows and sort visibleUsers
       if (isAscending === true) {
         sortUsers = sortAscending(visibleUsers);
         sortArrows =  <IconButton onClick={ this.onSortDescending }>

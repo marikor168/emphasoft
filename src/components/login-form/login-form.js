@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { isUserValid, isPassValid } from '../../utils/utils';
 
 import PersonIcon from '@material-ui/icons/Person';
 import LockIcon from '@material-ui/icons/Lock';
@@ -21,7 +21,6 @@ const styles = theme => ({
     margin: theme.spacing(3),
   },
 });
-
 class LoginForm extends Component {
 
   constructor(props) {
@@ -29,36 +28,52 @@ class LoginForm extends Component {
     this.state = {
       username: '',
       password: '',
+      usernameValid: true,
+      passwordValid: true,
     }
   }
 
+  onUsernameChange = (event) => {
+    this.setState({
+      username: event.target.value,
+      usernameValid: isUserValid(event.target.value),
+    });
+  }
+
+  onPasswordChange = (event) => {
+    this.setState({
+      password: event.target.value,
+      passwordValid: isPassValid(event.target.value),
+    });
+  }  
+
+  onSubmitHandle = (event) => {
+    event.preventDefault();
+
+    const {usernameValid, passwordValid} = this.state;
+    this.props.onLogin(usernameValid, passwordValid);
+  }
+
   render() {
-    const { isLoggedIn, 
-      onLogin, 
-      onUsernameChange, onPasswordChange, 
-      usernameValid, passwordValid 
-    } = this.props;
 
     const { classes } = this.props;
-  
-    if(isLoggedIn) {
-      return <Redirect to="/table" />
-    }
+    const { username, password, usernameValid, passwordValid } = this.state;
   
     return (
       <div className="login-form__wrapper">
         <Paper elevation={22} className="login-form__paper">
           <h1 className="login-form__title">Авторизация</h1>
-          <form className="login-form" onSubmit={ onLogin }>
+          <form className="login-form" onSubmit={ this.onSubmitHandle }>
             <TextField
-              className={classes.margin}
+              className={ classes.margin }
               type="text"
               name="username"
+              value={ username }
+              onChange={ this.onUsernameChange }
               placeholder="Пользователь"
+              required 
               error = { !usernameValid }
               helperText = { !usernameValid && 'Incorrect input' }
-              onChange={ onUsernameChange }
-              required 
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -67,11 +82,12 @@ class LoginForm extends Component {
                 ),
               }}/>          
             <TextField  
-              className={classes.margin}
+              className={ classes.margin }
               type="password"
               name="password"
+              value={ password }
+              onChange={ this.onPasswordChange }
               placeholder="Пароль"
-              onChange={ onPasswordChange }
               required 
               error = { !passwordValid }
               helperText = { !passwordValid && 'Incorrect input'}
@@ -84,7 +100,7 @@ class LoginForm extends Component {
               }}/>
   
             <Button 
-              className={classes.button}
+              className={ classes.button }
               color="primary" 
               variant="contained" 
               type="submit">Войти</Button>
@@ -92,7 +108,7 @@ class LoginForm extends Component {
         </Paper>
       </div>  
     );
-  };
+  };  
 };
 
 export default withStyles(styles)(LoginForm);

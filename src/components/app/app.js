@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 
 import LoginForm from '../login-form';
 import UsersTable from '../users-table';
+import Spinner from '../spinner';
 import { isUserValid, isPassValid } from '../../utils/utils.js';
 
 import './app.css';
@@ -25,23 +26,18 @@ export default class App extends Component {
     if (this.state.usernameValid === false || this.state.passwordValid === false)
     return;
 
-    let response = await fetch("http://emphasoft-test-assignment.herokuapp.com/api/v1/users/", {
-        method: "GET",
-        headers: {
-              'Authorization': `Token ${this.token}`,
-            },
-        });
+    // let response = await fetch("http://emphasoft-test-assignment.herokuapp.com/api/v1/users/", {
+    //     method: "GET",
+    //     headers: {
+    //           'Authorization': `Token ${this.token}`,
+    //         },
+    //     });
 
-    let users = await response.json();
-    let isUserExistsAndCredsValid = users.some(user => {
-      return user.username === this.state.username
-    });
-
-    // let users = 
-    // getAllUsers(this.token)
-    // .then(data => this.users = data)
-    // console.log("UUUUUSSSERS", this.users);
-    if (isUserExistsAndCredsValid) {
+    // let users = await response.json();
+    // let isUserExistsAndCredsValid = users.some(user => {
+    //   return user.username === this.state.username
+    // });
+    // if (isUserExistsAndCredsValid) {
     
     this.setState({
       isLoggedIn: true,
@@ -50,9 +46,9 @@ export default class App extends Component {
       usernameValid: isUserValid(this.state.username),
       passwordValid: isPassValid(this.state.password),
     });
-  } else {
-    alert("WRONG USER SSSSKA")
-  }
+  // } else {
+  //   alert("WRONG USER SSSSKA")
+  // }
   }
 
   onLogout = () => {
@@ -78,19 +74,19 @@ export default class App extends Component {
   }  
 
   componentDidMount() {
-    fetch("http://emphasoft-test-assignment.herokuapp.com/api-token-auth/", {
-      method: "POST",
-      body: JSON.stringify({username: "test_super", password: "Nf<U4f<rDbtDxAPn"}),
-      headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-      }).then(response => response.json())
-      .then(data => {
-        this.token = data.token;
+    // fetch("http://emphasoft-test-assignment.herokuapp.com/api-token-auth/", {
+    //   method: "POST",
+    //   body: JSON.stringify({username: "test_super", password: "Nf<U4f<rDbtDxAPn"}),
+    //   headers: {
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json'
+    //       },
+    //   }).then(response => response.json())
+    //   .then(data => {
+    //     this.token = data.token;
         this.setState({isLoading: false})
-      }
-    );
+    //   }
+    // );
   }
 
   render() {
@@ -99,7 +95,7 @@ export default class App extends Component {
     } = this.state;
       
     if (this.state.isLoading !== false) {
-      return <h1>Loading</h1>
+      return <Spinner />
     } else {
       return(
         <Router>
@@ -133,35 +129,24 @@ export default class App extends Component {
   };
 };
 
-async function getToken() {
-  fetch("http://emphasoft-test-assignment.herokuapp.com/api-token-auth/", {
-    method: "POST",
-    body: JSON.stringify({username: "test_super", password: "Nf<U4f<rDbtDxAPn"}),
-    headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-    }).then(response => response.json())
-      .then(data => this.token = data.token
-  );
-}
+// async function getToken() {
+//   fetch("http://emphasoft-test-assignment.herokuapp.com/api-token-auth/", {
+//     method: "POST",
+//     body: JSON.stringify({username: "test_super", password: "Nf<U4f<rDbtDxAPn"}),
+//     headers: {
+//           'Accept': 'application/json',
+//           'Content-Type': 'application/json'
+//         },
+//     }).then(response => response.json())
+//       .then(data => this.token = data.token
+//   );
+// }
 
-async function getAllUsers(token) {
-  console.log("TOOOO<E", token)
-  // let users ;
-
-  let promise =  await fetch("http://emphasoft-test-assignment.herokuapp.com/api/v1/users/", {
-  method: "GET",
-  headers: {
-        'Authorization': `Token ${token}`,
-      },
-  })
-  
- let users = await promise.json()
-  // .then(data => {
-  //   users = data
-  // })
-  // console.log(":DADAD", users)
-  return users;
-
-}
+// function getAllUsers(token) {
+//   fetch("http://emphasoft-test-assignment.herokuapp.com/api/v1/users/", {
+//         method: "GET",
+//         headers: {
+//               'Authorization': `Token ${token}`,
+//             },
+//         });
+// }

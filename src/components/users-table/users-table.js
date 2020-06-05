@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 
 import SearchPanel from '../search-panel';
+import Spinner from '../spinner';
 
 import { sortAscending, sortDescending, searchUsers } from '../../utils/utils.js';
+import emphaService from '../../services/emphaService';
 
 import { withStyles } from '@material-ui/core/styles';
 import { Table, 
@@ -18,6 +20,9 @@ import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import IconButton from '@material-ui/core/IconButton';
 
 import './users-table.css';
+
+const service = new emphaService();
+console.log('service', service);
 
 const StyledTableCell = withStyles((theme) => ({  
   head: {
@@ -53,6 +58,7 @@ export default class UsersTable extends Component {
       isAscending: false,
       isDescending: false,
       search: '',
+      users: []
     }
   }
 
@@ -77,45 +83,49 @@ export default class UsersTable extends Component {
   
 
   componentDidMount() {
-    //let users = this.props.load();
-    // setState({users: users, isLoading: false});
-    fetch("http://emphasoft-test-assignment.herokuapp.com/api-token-auth/", {
-      method: "POST",
-      body: JSON.stringify({username: "test_super", password: "Nf<U4f<rDbtDxAPn"}),
-      headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-      }).then(response => response.json())
-      .then(data => fetch("http://emphasoft-test-assignment.herokuapp.com/api/v1/users/", {
-        method: "GET",
-        headers: {
-              'Authorization': `Token ${data.token}`,
-            },
-        }).then(response => response.json())
-          .then(data => {
-            this.setState({users: data, isLoading: false})
-          })
-      );
-    // let users = await response.json();
-    //     console.log(users);
-    // let isUserExistsAndCredsValid = users.some(user => {
-    //   return user.username == this.state.username
-    // });
+    // let users = service.getAllUsers();
+    let users = service.users;
+    console.log('USERSUSERS',   users);
 
-        // );
+    this.setState({
+      users: users, 
+      isLoading: false
+    });
+
+
+
+    // fetch("http://emphasoft-test-assignment.herokuapp.com/api-token-auth/", {
+    //   method: "POST",
+    //   body: JSON.stringify({username: "test_super", password: "Nf<U4f<rDbtDxAPn"}),
+    //   headers: {
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json'
+    //       },
+    //   }).then(response => response.json())
+    //   .then(data => fetch("http://emphasoft-test-assignment.herokuapp.com/api/v1/users/", {
+    //     method: "GET",
+    //     headers: {
+    //           'Authorization': `Token ${data.token}`,
+    //         },
+    //     }).then(response => response.json())
+    //       .then(data => {
+    //         this.setState({users: data, isLoading: false})
+    //       })
+    //   );
   }
 
   render() {
-    const { isAscending, isDescending, search } = this.state;
+    const { isAscending, isDescending, search, users } = this.state;
     const { onLogout } = this.props;
 
+    console.log('users render tableState', users);
+
     if(this.state.isLoading !== false) {
-      return <h1>Loading</h1>
+      return <Spinner />
     } else {
 
       let sortUsers, sortArrows;
-      const visibleUsers = searchUsers(this.state.users, search);
+      const visibleUsers = searchUsers(users, search);
 
       if (isAscending === true) {
         sortUsers = sortAscending(visibleUsers);

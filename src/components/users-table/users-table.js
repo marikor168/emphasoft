@@ -22,7 +22,6 @@ import IconButton from '@material-ui/core/IconButton';
 import './users-table.css';
 
 const service = new emphaService();
-console.log('service', service);
 
 const StyledTableCell = withStyles((theme) => ({  
   head: {
@@ -83,17 +82,13 @@ export default class UsersTable extends Component {
   
 
   componentDidMount() {
-    // let users = service.getAllUsers();
     let users = service.users;
-    console.log('USERSUSERS',   users);
 
     this.setState({
       users: users, 
       isLoading: false
     });
-
-
-
+    
     // fetch("http://emphasoft-test-assignment.herokuapp.com/api-token-auth/", {
     //   method: "POST",
     //   body: JSON.stringify({username: "test_super", password: "Nf<U4f<rDbtDxAPn"}),

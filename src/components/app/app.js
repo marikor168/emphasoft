@@ -26,19 +26,6 @@ export default class App extends Component {
     if (this.state.usernameValid === false || this.state.passwordValid === false)
     return;
 
-    // let response = await fetch("http://emphasoft-test-assignment.herokuapp.com/api/v1/users/", {
-    //     method: "GET",
-    //     headers: {
-    //           'Authorization': `Token ${this.token}`,
-    //         },
-    //     });
-
-    // let users = await response.json();
-    // let isUserExistsAndCredsValid = users.some(user => {
-    //   return user.username === this.state.username
-    // });
-    // if (isUserExistsAndCredsValid) {
-    
     this.setState({
       isLoggedIn: true,
       username: this.state.username,
@@ -46,9 +33,6 @@ export default class App extends Component {
       usernameValid: isUserValid(this.state.username),
       passwordValid: isPassValid(this.state.password),
     });
-  // } else {
-  //   alert("WRONG USER SSSSKA")
-  // }
   }
 
   onLogout = () => {
@@ -74,19 +58,7 @@ export default class App extends Component {
   }  
 
   componentDidMount() {
-    // fetch("http://emphasoft-test-assignment.herokuapp.com/api-token-auth/", {
-    //   method: "POST",
-    //   body: JSON.stringify({username: "test_super", password: "Nf<U4f<rDbtDxAPn"}),
-    //   headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //       },
-    //   }).then(response => response.json())
-    //   .then(data => {
-    //     this.token = data.token;
-        this.setState({isLoading: false})
-    //   }
-    // );
+    this.setState({isLoading: false});
   }
 
   render() {
@@ -109,7 +81,8 @@ export default class App extends Component {
                     onUsernameChange={ this.onUsernameChange }
                     onPasswordChange={ this.onPasswordChange } 
                     usernameValid={ usernameValid }
-                    passwordValid={ passwordValid } /> )
+                    passwordValid={ passwordValid } 
+                    /> )
                 } else {
                   return <Redirect to="/table" />
                 } 
@@ -128,25 +101,3 @@ export default class App extends Component {
     }
   };
 };
-
-// async function getToken() {
-//   fetch("http://emphasoft-test-assignment.herokuapp.com/api-token-auth/", {
-//     method: "POST",
-//     body: JSON.stringify({username: "test_super", password: "Nf<U4f<rDbtDxAPn"}),
-//     headers: {
-//           'Accept': 'application/json',
-//           'Content-Type': 'application/json'
-//         },
-//     }).then(response => response.json())
-//       .then(data => this.token = data.token
-//   );
-// }
-
-// function getAllUsers(token) {
-//   fetch("http://emphasoft-test-assignment.herokuapp.com/api/v1/users/", {
-//         method: "GET",
-//         headers: {
-//               'Authorization': `Token ${token}`,
-//             },
-//         });
-// }

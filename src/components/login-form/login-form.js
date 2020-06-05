@@ -29,29 +29,16 @@ class LoginForm extends Component {
     this.state = {
       username: '',
       password: '',
-      // usernameValid: true,
-      // passwordValid: true,
     }
   }
 
-  // onUsernameChange = (event) => {
-  //   this.setState({
-  //     username: event.target.value,
-  //     usernameValid: isUserValid(event.target.value),
-  //   });
-  // }
-
-  // onPasswordChange = (event) => {
-  //   this.setState({
-  //     password: event.target.value,
-  //     passwordValid: isPassValid(event.target.value),
-  //   });
-  // }
-
   render() {
-    const { isLoggedIn, onLogin, 
+    const { isLoggedIn, 
+      onLogin, 
       onUsernameChange, onPasswordChange, 
-      usernameValid, passwordValid } = this.props;
+      usernameValid, passwordValid 
+    } = this.props;
+
     const { classes } = this.props;
   
     if(isLoggedIn) {
@@ -62,7 +49,7 @@ class LoginForm extends Component {
       <div className="login-form__wrapper">
         <Paper elevation={22} className="login-form__paper">
           <h1 className="login-form__title">Авторизация</h1>
-          <form className="login-form" onSubmit={ (e) => onLogin(e) }>
+          <form className="login-form" onSubmit={ onLogin }>
             <TextField
               className={classes.margin}
               type="text"
@@ -103,12 +90,9 @@ class LoginForm extends Component {
               type="submit">Войти</Button>
           </form>
         </Paper>
-      </div>
-
-  
-  );
-
-};
+      </div>  
+    );
+  };
 };
 
 export default withStyles(styles)(LoginForm);

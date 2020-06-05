@@ -44,7 +44,7 @@ export default class SearchPanel extends Component {
                 </InputAdornment>
               ),
             }}/>
-          <IconButton onClick={ onLogout }>
+          <IconButton onClick={ onLogout } className="icon">
             <ExitToAppIcon color="primary" />
           </IconButton>
       </div>      

@@ -29,23 +29,25 @@ const StyledTableCell = withStyles((theme) => ({
     color: '#ffffff',
     paddingTop: 5,
     paddingBottom: 5,
+    overflow: "hidden",
   },
   body: {
     fontSize: 14,
     minWidth: 97,
     maxWidth: 250,
-    overflow: "hidden",
+    overflow: "auto",
     wordWrap: "break-word"
   },
 }))(TableCell);
 
 const tableStyle = {
-  minWidth: 800,
   maxWidth: 1300,
   marginBottom: 30,
-  marginLeft: 15,
-  marginRight: 15,
-  overflow: "hidden",
+  marginLeft: 25,
+  marginRight: 25,
+  height: '77vh',
+  minWidth: '80%',
+  overflow: "auto",
 }
 export default class UsersTable extends Component {
 
@@ -123,30 +125,30 @@ export default class UsersTable extends Component {
       const elements = addRowTable(sortUsers);
 
       return(
-        <div>
+        <div className="table">
           <SearchPanel onLogout={ onLogout } onSearchChange={ this.onSearchChange }/>
-          <TableContainer align="center" >
-            <Paper elevation={10} style={tableStyle} >
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell>
-                      ID{ sortArrows }
-                    </StyledTableCell>
-                    <StyledTableCell>Username</StyledTableCell>
-                    <StyledTableCell>First name</StyledTableCell>
-                    <StyledTableCell>Last name</StyledTableCell>
-                    <StyledTableCell>Active</StyledTableCell>
-                    <StyledTableCell>Last login</StyledTableCell>
-                    <StyledTableCell>Superuser status</StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {elements}
-                </TableBody>
-              </Table>
-            </Paper>
-          </TableContainer>
+            <TableContainer align="center" >
+              <Paper elevation={10} style={tableStyle} >
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell>
+                        ID{ sortArrows }
+                      </StyledTableCell>
+                      <StyledTableCell>Username</StyledTableCell>
+                      <StyledTableCell>First name</StyledTableCell>
+                      <StyledTableCell>Last name</StyledTableCell>
+                      <StyledTableCell>Active</StyledTableCell>
+                      <StyledTableCell>Last login</StyledTableCell>
+                      <StyledTableCell>Superuser status</StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {elements}
+                  </TableBody>
+                </Table>
+              </Paper>
+            </TableContainer>
         </div>
       );    
     }

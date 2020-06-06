@@ -17,3 +17,29 @@ export function fetchUsers(token) {
         },
     });
 }
+
+export function fetchPostUser(token, user) {
+  return fetch("https://emphasoft-test-assignment.herokuapp.com/api/v1/users/", {
+    method: "POST",
+    body: JSON.stringify(user),
+    headers: {
+      'Authorization': `Token ${token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+}
+
+export function fetchEditUser(token, user) {
+  return fetch(`https://emphasoft-test-assignment.herokuapp.com/api/v1/users/${user.id}/`, {
+    method: "PATCH",
+    body: JSON.stringify(user),
+    headers: {
+      'Authorization': `Token ${token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+}
+
+// поправить адреса , может сделать через переменную общей части 

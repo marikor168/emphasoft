@@ -4,6 +4,11 @@
   align-items: center;
   margin: 40px auto 20px auto ;
   padding-left: 12px;
-  width: 93%;
-  max-width: 1300px;
+  width: 80%;
+  max-width: 1400px;
+}
+
+.buttons-wrapper {
+  display: flex;
+  align-items: center;
 }

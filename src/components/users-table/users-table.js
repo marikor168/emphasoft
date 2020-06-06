@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 
 import SearchPanel from '../search-panel';
+import Modal from '../modal';
 import Spinner from '../spinner';
 
 import { sortAscending, sortDescending, searchUsers } from '../../utils/utils.js';
-import { fetchToken, fetchUsers } from '../../services/emphaService';
+import { fetchToken, fetchUsers, fetchPostUser, fetchEditUser } from '../../services/emphaService';
 
 import { withStyles } from '@material-ui/core/styles';
 import { Table, 
@@ -17,6 +18,7 @@ import { Table,
 import CheckIcon from '@material-ui/icons/Check';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 
 import './users-table.css';
@@ -41,12 +43,12 @@ const StyledTableCell = withStyles((theme) => ({
 }))(TableCell);
 
 const tableStyle = {
-  maxWidth: 1300,
   marginBottom: 30,
   marginLeft: 25,
   marginRight: 25,
-  height: '77vh',
-  minWidth: '80%',
+  maxWidth: 1400,
+  width: '80%',
+  height: '80vh',
   overflow: "auto",
 }
 export default class UsersTable extends Component {
@@ -57,7 +59,9 @@ export default class UsersTable extends Component {
       isAscending: false,
       isDescending: false,
       search: '',
-      users: []
+      users: [],
+      open: false,
+      currentUser: {} 
     }
   }
 
@@ -79,6 +83,70 @@ export default class UsersTable extends Component {
     this.setState({ search });
   }  
 
+  onToggleModal = (user) => {
+    this.setState(( state ) => ({
+      open: !this.state.open,
+      currentUser: user,
+    }))
+  }  
+
+  saveUser = async(newUser) => {
+
+    let promise = await fetchToken();
+    let data = await promise.json();
+    let token = data.token;
+    console.log('token', token);
+    let userPromise = await fetchUsers(token);
+    let users = await userPromise.json();
+
+    // this.setState({
+    //   users: users, 
+    //   isLoading: false
+    // });
+
+    console.log('users saveUsers', users);
+    // const newArr = [
+    //   ...users,
+    //   newUser
+    // ];
+    if (newUser.id) {
+      await fetchEditUser(token, newUser);
+    } else {
+      await fetchPostUser(token, newUser);
+    }
+    console.log('!!!!!!!!!!newUser saveUser', newUser);
+    // let res = 
+    // 
+    // let json = await res.json();
+    // console.log(res);
+
+    userPromise = await fetchUsers(token);
+    users = await userPromise.json();
+
+    console.log('users saveUsers', users);
+
+    this.setState({
+      open: false,
+      currentUser: {},
+      isLoading: false,
+    });
+  };
+
+  addRowTable(arr) {
+    return arr.map((user, i) =>
+      <TableRow key={i}>
+        <StyledTableCell>{user.id}</StyledTableCell>
+        <StyledTableCell>{user.username}</StyledTableCell>
+        <StyledTableCell>{user.first_name}</StyledTableCell>
+        <StyledTableCell>{user.last_name}</StyledTableCell>
+        <StyledTableCell>{(user.is_active) && <CheckIcon color="primary"/>}</StyledTableCell>
+        <StyledTableCell>{user.last_login}</StyledTableCell>
+        <StyledTableCell>{(user.is_superuser) && <CheckIcon color="primary"/>}</StyledTableCell>
+        <StyledTableCell><IconButton onClick={ () => this.onToggleModal(user) }><EditIcon color="primary"/></IconButton></StyledTableCell>
+      </TableRow>
+    )
+  }
+
   async componentDidMount() {
     let promise = await fetchToken();
     let data = await promise.json();
@@ -94,7 +162,7 @@ export default class UsersTable extends Component {
   }
 
   render() {
-    const { isAscending, isDescending, search, users } = this.state;
+    const { isAscending, isDescending, search, users, open, currentUser } = this.state;
     const { onLogout } = this.props;
 
     if(this.state.isLoading !== false) {
@@ -122,11 +190,11 @@ export default class UsersTable extends Component {
                   </IconButton>
       };
 
-      const elements = addRowTable(sortUsers);
+      const elements = this.addRowTable(sortUsers);
 
       return(
         <div className="table">
-          <SearchPanel onLogout={ onLogout } onSearchChange={ this.onSearchChange }/>
+          <SearchPanel onLogout={ onLogout } onSearchChange={ this.onSearchChange } onToggleModal={ this.onToggleModal }/>
             <TableContainer align="center" >
               <Paper elevation={10} style={tableStyle} >
                 <Table>
@@ -141,6 +209,7 @@ export default class UsersTable extends Component {
                       <StyledTableCell>Active</StyledTableCell>
                       <StyledTableCell>Last login</StyledTableCell>
                       <StyledTableCell>Superuser status</StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -149,22 +218,12 @@ export default class UsersTable extends Component {
                 </Table>
               </Paper>
             </TableContainer>
+            <Modal
+              user = { currentUser }
+              onToggleModal={ this.onToggleModal } open={ open } 
+              saveUser={ this.saveUser } />
         </div>
       );    
     }
   };
 };
-
-function addRowTable(arr) {
-  return arr.map((user, i) =>
-    <TableRow key={i}>
-      <StyledTableCell>{user.id}</StyledTableCell>
-      <StyledTableCell>{user.username}</StyledTableCell>
-      <StyledTableCell>{user.first_name}</StyledTableCell>
-      <StyledTableCell>{user.last_name}</StyledTableCell>
-      <StyledTableCell>{(user.is_active) && <CheckIcon color="primary"/>}</StyledTableCell>
-      <StyledTableCell>{user.last_login}</StyledTableCell>
-      <StyledTableCell>{(user.is_superuser) && <CheckIcon color="primary"/>}</StyledTableCell>
-    </TableRow>
-  )
-}

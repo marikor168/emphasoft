@@ -47,7 +47,7 @@ class LoginForm extends Component {
     });
   }  
 
-  onSubmitHandle = (event) => {
+  onLoginSubmit = (event) => {
     event.preventDefault();
 
     const {usernameValid, passwordValid} = this.state;
@@ -63,7 +63,7 @@ class LoginForm extends Component {
       <div className="login-form__wrapper">
         <Paper elevation={22} className="login-form__paper">
           <h1 className="login-form__title">Авторизация</h1>
-          <form className="login-form" onSubmit={ this.onSubmitHandle }>
+          <form className="login-form" onSubmit={ this.onLoginSubmit }>
             <TextField
               className={ classes.margin }
               type="text"

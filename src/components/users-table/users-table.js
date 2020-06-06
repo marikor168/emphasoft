@@ -95,41 +95,20 @@ export default class UsersTable extends Component {
     let promise = await fetchToken();
     let data = await promise.json();
     let token = data.token;
-    console.log('token', token);
-    let userPromise = await fetchUsers(token);
-    let users = await userPromise.json();
 
-    // this.setState({
-    //   users: users, 
-    //   isLoading: false
-    // });
-
-    console.log('users saveUsers', users);
-    // const newArr = [
-    //   ...users,
-    //   newUser
-    // ];
     if (newUser.id) {
       await fetchEditUser(token, newUser);
     } else {
       await fetchPostUser(token, newUser);
     }
-    console.log('!!!!!!!!!!newUser saveUser', newUser);
-    // let res = 
-    // 
-    // let json = await res.json();
-    // console.log(res);
-
-    userPromise = await fetchUsers(token);
-    users = await userPromise.json();
-
-    console.log('users saveUsers', users);
-
+   
     this.setState({
       open: false,
       currentUser: {},
       isLoading: false,
     });
+
+    this.reloadData(this.token);
   };
 
   addRowTable(arr) {
@@ -147,10 +126,10 @@ export default class UsersTable extends Component {
     )
   }
 
-  async componentDidMount() {
-    let promise = await fetchToken();
-    let data = await promise.json();
-    let token = data.token;
+  async reloadData(token) {
+    this.setState({
+      isLoading: true
+    });
 
     let userPromise = await fetchUsers(token);
     let users = await userPromise.json();
@@ -159,6 +138,13 @@ export default class UsersTable extends Component {
       users: users, 
       isLoading: false
     });
+  }
+
+  async componentDidMount() {
+    let promise = await fetchToken();
+    let data = await promise.json();
+    this.token = data.token;
+    this.reloadData(this.token);
   }
 
   render() {

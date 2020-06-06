@@ -10,7 +10,7 @@ import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { withStyles } from '@material-ui/core/styles';
 
-import { isUserValid, isPassValid, isFirstNameValid, isLastNameValid} from '../../utils/utils';
+import {isPassValid, isFirstNameValid, isLastNameValid, isValid } from '../../utils/utils';
 
 import './modal.css';
 
@@ -35,8 +35,8 @@ class Modal extends Component {
       last_login: '',      
       usernameValid: true,
       passwordValid: true,
-      firstNameValid: true,
-      lastNameValid: true,
+      first_nameValid: true,
+      last_nameValid: true,
     }    
   }
   
@@ -46,53 +46,32 @@ class Modal extends Component {
     });
   };
 
-  onUsernameChange = (event) => {
+  onInputChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    const isValidName = name + "Valid";
+    
     this.setState({
-      username: event.target.value,
-      usernameValid: isUserValid(event.target.value),
-    });
+      [name]: value,
+      [isValidName]: isValid(value, name)
+    })
   }
-
-  onPasswordChange = (event) => {
-    this.setState({
-      password: event.target.value,
-      passwordValid: isPassValid(event.target.value),
-    });
-  }  
-
-  onFirstNameChange = (event) => {
-    this.setState({
-      first_name: event.target.value,
-      firstNameValid: isFirstNameValid(event.target.value),
-    });
-  }
-
-  onLastNameChange = (event) => {
-    this.setState({
-      last_name: event.target.value,
-      lastNameValid: isLastNameValid(event.target.value),
-    });
-  }  
 
   onUserSubmit = (event) => {
     event.preventDefault();
 
-    const { usernameValid, passwordValid, firstNameValid, lastNameValid } = this.state;
+    const { usernameValid, passwordValid, first_nameValid, last_nameValid } = this.state;
 
-
-    console.log( usernameValid, passwordValid, firstNameValid, lastNameValid );
-    if( !usernameValid || !passwordValid || !firstNameValid || !lastNameValid ) {
+    if( !usernameValid || !passwordValid || !first_nameValid || !last_nameValid ) {
       return;
     }
 
     const newUser = {
       id: this.props.user.id,
-      // date: setDate(), 
       username: this.state.username !== undefined ? this.state.username : this.props.user.username,
       first_name: this.state.first_name !== undefined ? this.state.first_name : this.props.user.first_name,
       last_name: this.state.last_name !== undefined ? this.state.last_name : this.props.user.last_name,
       password: this.state.password !== undefined ? this.state.password : this.props.user.password,
-
       last_login: this.state.last_login !== undefined ? this.state.last_login : this.props.user.last_login,
       is_active: this.state.is_active !== undefined ? this.state.is_active : this.props.user.is_active,
       is_superuser: this.state.is_superuser !== undefined ? this.state.is_superuser : this.props.user.is_superuser, 
@@ -107,9 +86,9 @@ class Modal extends Component {
   }
 
   render() {
-    const { onToggleModal, open, user } = this.props;
-    const { classes } = this.props;
-    const { usernameValid, passwordValid, firstNameValid, lastNameValid } = this.state;
+    const { onToggleModal, open, user, classes } = this.props;
+    const { usernameValid, passwordValid, first_nameValid, last_nameValid } = this.state;
+
     const isCreate = this.isCreateMode();
     const title = user.id ? 'Edit' : 'Create';
     const isActive = this.state.is_active === undefined ? user.is_active: this.state.is_active;
@@ -124,24 +103,25 @@ class Modal extends Component {
             }
             
             <TextField autoFocus type="text" name="username" label="Username" margin="dense" 
-              required fullWidth onChange= { this.onUsernameChange } defaultValue={user.username || this.state.username || ""} 
+              required fullWidth onChange= { this.onInputChange } defaultValue={user.username || this.state.username || ""} 
               error={ !usernameValid }
               helperText = { !usernameValid && 'Incorrect input'} />            
             <TextField type="text" name="first_name" label="First name" margin="dense"
-              fullWidth onChange= { this.onFirstNameChange } defaultValue={user.first_name || this.state.first_name || ""} 
-              error={ !firstNameValid }
-              helperText = { !firstNameValid && 'Incorrect input'}/>
+              fullWidth onChange= { this.onInputChange } defaultValue={user.first_name || this.state.first_name || ""} 
+              error={ !first_nameValid }
+              helperText = { !first_nameValid && 'Incorrect input'}/>
             <TextField type="text" name="last_name" label="Last name" margin="dense"
-              fullWidth onChange= { this.onLastNameChange } defaultValue={user.last_name || this.state.last_name || ""} 
-              error={ !lastNameValid }
-              helperText = { !lastNameValid && 'Incorrect input'} />
+              fullWidth onChange= { this.onInputChange } defaultValue={user.last_name || this.state.last_name || ""} 
+              error={ !last_nameValid }
+              helperText = { !last_nameValid && 'Incorrect input'} />
             <TextField type="password" name="password" label="Password" margin="dense"
-              required fullWidth onChange= { this.onPasswordChange } defaultValue={user.password || this.state.password || ""} 
+              required fullWidth onChange= { this.onInputChange } defaultValue={user.password || this.state.password || ""} 
               error = { !passwordValid }
               helperText = { !passwordValid && 'Incorrect input'} />   
             { 
-            isCreate || <TextField type="text" name="last_login" label="Last login" margin="dense"
-               disabled fullWidth defaultValue={user.last_login || this.state.last_login || ""} />}
+                isCreate || <TextField type="text" name="last_login" label="Last login" margin="dense"
+               disabled fullWidth defaultValue={user.last_login || this.state.last_login || ""} />
+            }
               
             <FormControlLabel
               label="Active" labelPlacement="start" className={ classes.marginLeft }

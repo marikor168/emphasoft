@@ -41,5 +41,3 @@ export function fetchEditUser(token, user) {
     }
   });
 }
-
-// поправить адреса , может сделать через переменную общей части 

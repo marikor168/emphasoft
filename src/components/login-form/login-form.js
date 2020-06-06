@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { isUserValid, isPassValid } from '../../utils/utils';
+import { isValid } from '../../utils/utils';
 
 import PersonIcon from '@material-ui/icons/Person';
 import LockIcon from '@material-ui/icons/Lock';
@@ -33,19 +33,16 @@ class LoginForm extends Component {
     }
   }
 
-  onUsernameChange = (event) => {
+  onInputChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    const isValidName = name + "Valid";
+    
     this.setState({
-      username: event.target.value,
-      usernameValid: isUserValid(event.target.value),
-    });
+      [name]: value,
+      [isValidName]: isValid(value, name)
+    })
   }
-
-  onPasswordChange = (event) => {
-    this.setState({
-      password: event.target.value,
-      passwordValid: isPassValid(event.target.value),
-    });
-  }  
 
   onLoginSubmit = (event) => {
     event.preventDefault();
@@ -68,8 +65,8 @@ class LoginForm extends Component {
               className={ classes.margin }
               type="text"
               name="username"
-              value={ username }
-              onChange={ this.onUsernameChange }
+              defaultValue={ username }
+              onChange={ this.onInputChange }
               placeholder="Пользователь"
               required 
               error = { !usernameValid }
@@ -85,8 +82,8 @@ class LoginForm extends Component {
               className={ classes.margin }
               type="password"
               name="password"
-              value={ password }
-              onChange={ this.onPasswordChange }
+              defaultValue={ password }
+              onChange={ this.onInputChange }
               placeholder="Пароль"
               required 
               error = { !passwordValid }

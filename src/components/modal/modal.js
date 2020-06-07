@@ -10,7 +10,7 @@ import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { withStyles } from '@material-ui/core/styles';
 
-import {isPassValid, isFirstNameValid, isLastNameValid, isValid } from '../../utils/utils';
+import { isValid } from '../../utils/utils';
 
 import './modal.css';
 
@@ -97,11 +97,11 @@ class Modal extends Component {
         <DialogTitle id="form-dialog-title">{title} User</DialogTitle>
         <DialogContent>
           <form onSubmit={ this.onUserSubmit }>
-            {
+
+            { 
               isCreate || <TextField type="text" name="id" label="ID" margin="dense" 
-                disabled fullWidth defaultValue={user.id || this.state.id || ""}/>
+                disabled fullWidth defaultValue={user.id || this.state.id || ""}/> 
             }
-            
             <TextField autoFocus type="text" name="username" label="Username" margin="dense" 
               required fullWidth onChange= { this.onInputChange } defaultValue={user.username || this.state.username || ""} 
               error={ !usernameValid }
@@ -119,40 +119,26 @@ class Modal extends Component {
               error = { !passwordValid }
               helperText = { !passwordValid && 'Incorrect input'} />   
             { 
-                isCreate || <TextField type="text" name="last_login" label="Last login" margin="dense"
-               disabled fullWidth defaultValue={user.last_login || this.state.last_login || ""} />
-            }
-              
+              isCreate || <TextField type="text" name="last_login" label="Last login" margin="dense"
+                disabled fullWidth defaultValue={user.last_login || this.state.last_login || ""} />
+            }              
             <FormControlLabel
               label="Active" labelPlacement="start" className={ classes.marginLeft }
-              control={
-              <Switch color="primary"  
-              checked={  isActive || false } 
-              onChange={this.onSwitchChange} 
-              name="is_active"  
-              />} 
+              control={ <Switch color="primary" checked={  isActive || false } 
+                onChange={this.onSwitchChange} name="is_active" /> } 
               />   
-              { 
-                isCreate || <FormControlLabel
-                label="Superuser status" labelPlacement="start" 
-                className={ classes.margin } 
-                control={
-                <Switch color="primary" 
-                checked={ this.props.user.is_superuser || this.state.is_superuser } 
-                name="is_superuser"  
-                />} />
-              }         
+            { 
+              isCreate || <FormControlLabel
+                label="Superuser status" labelPlacement="start" className={ classes.margin } 
+                control={ <Switch color="primary" name="is_superuser"
+                checked={ this.props.user.is_superuser || this.state.is_superuser } /> } 
+              />
+            }         
             
-
-        <DialogActions>
-          <Button onClick={ onToggleModal } color="primary">
-            Cancel
-          </Button>
-          <Button 
-          color="primary" type="submit">
-            Save
-          </Button>
-        </DialogActions>
+            <DialogActions>
+              <Button onClick={ onToggleModal } color="primary">Cancel</Button>
+              <Button color="primary" type="submit">Save</Button>
+            </DialogActions>
           </form>
         </DialogContent>
       </Dialog>

@@ -14,9 +14,9 @@ export function isValid(value, name) {
     case 'password':
       return (value.length > 0) && (value.length < 129) && (/^(?=.*[A-Z])(?=.*\d).{8,}$/.test(value));
     case 'first_name':
-      return (value.length > 0) && (value.length < 31);
+      return (value.length < 31);
     case 'last_name':
-      return (value.length > 0) && (value.length < 151);
+      return (value.length < 151);
     default:
       return false;
   }
